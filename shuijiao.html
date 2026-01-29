@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>趣味睡眠质量测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background: linear-gradient(to bottom, #e8f4f8 0%, #ffffff 100%);
+            min-height: 100vh;
+            padding: 20px 10px;
+        }
+        /* 头部样式 */
+        .header {
+            text-align: center;
+            padding: 25px 0;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .header::after {
+            content: "";
+            display: block;
+            width: 80%;
+            height: 1px;
+            background: #b3d4e5;
+            margin: 20px auto 0;
+        }
+        .header h1 {
+            color: #2F5496;
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+        /* 答题卡片 */
+        .test-card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 25px 20px;
+            width: 92%;
+            margin: 0 auto 25px;
+            box-shadow: 0 4px 12px rgba(47, 84, 150, 0.08);
+        }
+        .tips {
+            color: #999;
+            font-size: 13px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #eee;
+        }
+        /* 题目样式 */
+        .question {
+            margin-bottom: 22px;
+        }
+        .question:last-child {
+            margin-bottom: 0;
+        }
+        .question-title {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            color: #555;
+        }
+        .option:hover {
+            border-color: #b3d4e5;
+            background: #f8fcfe;
+        }
+        .option input {
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
+            accent-color: #2F5496;
+        }
+        .option.selected {
+            background: #e8f4f8;
+            border-color: #2F5496;
+            color: #2F5496;
+            font-weight: 500;
+        }
+        /* 提交按钮 */
+        .submit-btn {
+            display: block;
+            width: 92%;
+            height: 48px;
+            line-height: 48px;
+            background: #2F5496;
+            color: #fff;
+            border: none;
+            border-radius: 24px;
+            font-size: 17px;
+            font-weight: bold;
+            margin: 0 auto 30px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            box-shadow: 0 4px 8px rgba(47, 84, 150, 0.2);
+        }
+        .submit-btn:hover {
+            background: #234177;
+        }
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+        /* 结果页样式 */
+        .result-page {
+            display: none;
+            width: 92%;
+            margin: 0 auto;
+        }
+        .result-card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 30px 25px;
+            box-shadow: 0 4px 12px rgba(47, 84, 150, 0.08);
+            margin-bottom: 20px;
+        }
+        .result-tag {
+            display: inline-block;
+            padding: 6px 15px;
+            background: #e8f4f8;
+            color: #2F5496;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 18px;
+            font-weight: 500;
+        }
+        .result-title {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .result-desc {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+        /* 尾部互动 */
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 13px;
+            padding-top: 20px;
+        }
+        .footer-tip {
+            font-size: 12px;
+            margin-top: 8px;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部 -->
+    <div class="header">
+        <h1>💤 你的睡眠质量段位测试</h1>
+        <p>6道题解锁专属睡眠报告，选完提交立出结果～</p>
+    </div>
+
+    <!-- 答题区 -->
+    <div class="test-card" id="testArea">
+        <p class="tips">每题仅选1项，完成后点击下方提交按钮查看结果</p>
+        <!-- 题目1 -->
+        <div class="question">
+            <p class="question-title">1. 你每晚入睡需要多久？</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q1" value="1">A 沾枕就睡（≤10分钟）
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="2">B 10-30分钟，放松后即可入睡
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="3">C 30-60分钟，翻来覆去难入眠
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="4">D 超过1小时，严重失眠难入睡
+                </label>
+            </div>
+        </div>
+        <!-- 题目2 -->
+        <div class="question">
+            <p class="question-title">2. 夜间醒来的频率是多少？</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q2" value="1">A 一觉到天亮，基本不会醒
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="2">B 偶尔醒1次，翻个身就能继续睡
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="3">C 经常醒2-3次，醒后需缓一会再睡
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="4">D 频繁醒来，醒后再也难以入睡
+                </label>
+            </div>
+        </div>
+        <!-- 题目3 -->
+        <div class="question">
+            <p class="question-title">3. 早上起床时的状态？</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q3" value="1">A 神清气爽，不用闹钟，轻松起床不费劲
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="2">B 轻微犯困，洗漱后就能快速恢复精神
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="3">C 昏昏沉沉，赖床很久，起来仍浑身乏力
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="4">D 极度疲惫，起床像打仗，一整天都没精神
+                </label>
+            </div>
+        </div>
+        <!-- 题目4 -->
+        <div class="question">
+            <p class="question-title">4. 白天的精神状态如何？</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q4" value="1">A 精力充沛，专注度拉满，几乎不犯困
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="2">B 偶尔犯困，喝水走动后就能快速缓解
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="3">C 频繁犯困，工作学习容易走神，没状态
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="4">D 时刻想睡，犯困到影响正常生活和工作
+                </label>
+            </div>
+        </div>
+        <!-- 题目5 -->
+        <div class="question">
+            <p class="question-title">5. 你每晚的睡眠时间大概是？</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q5" value="1">A 7-8小时，时长刚好，贴合身体需求
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="2">B 6-7小时，略偏少，日常状态不受影响
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="3">C 5-6小时，明显睡眠不足，偶尔会疲惫
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="4">D 不足5小时/超过9小时，睡眠过多或过少
+                </label>
+            </div>
+        </div>
+        <!-- 题目6 -->
+        <div class="question">
+            <p class="question-title">6. 睡醒后会出现不适症状吗？</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q6" value="1">A 无任何不适，身体轻盈，浑身舒畅
+                </label>
+                <label class="option">
+                    <input type="radio" name="q6" value="2">B 偶尔轻微腰酸/头痛，过会儿就能消失
+                </label>
+                <label class="option">
+                    <input type="radio" name="q6" value="3">C 经常头痛、肢体发麻，一整天精神萎靡
+                </label>
+                <label class="option">
+                    <input type="radio" name="q6" value="4">D 长期浑身酸痛、头晕，睡越久反而越累
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提交按钮 -->
+    <button class="submit-btn" id="submitBtn">点击提交，解锁我的睡眠报告</button>
+
+    <!-- 结果页 -->
+    <div class="result-page" id="resultArea">
+        <div class="result-card" id="resultContent">
+            <!-- 结果内容JS生成 -->
+        </div>
+        <div class="footer">
+            <p>测完别私藏～转发给朋友，看看谁是睡眠王者！</p>
+            <p class="footer-tip">本次测试为趣味参考，非专业医疗诊断哦～</p>
+        </div>
+    </div>
+
+    <script>
+        // 选项选中高亮
+        const options = document.querySelectorAll('.option');
+        options.forEach(option => {
+            option.addEventListener('click', function() {
+                // 清除同题目的其他选中样式
+                const sameQuestionOptions = this.parentElement.querySelectorAll('.option');
+                sameQuestionOptions.forEach(opt => opt.classList.remove('selected'));
+                // 添加当前选中样式
+                this.classList.add('selected');
+            });
+        });
+
+        // 提交按钮点击事件
+        const submitBtn = document.getElementById('submitBtn');
+        const testArea = document.getElementById('testArea');
+        const resultArea = document.getElementById('resultArea');
+        const resultContent = document.getElementById('resultContent');
+
+        submitBtn.addEventListener('click', function() {
+            // 获取所有选中的值
+            let score = 0;
+            const q1 = document.querySelector('input[name="q1"]:checked');
+            const q2 = document.querySelector('input[name="q2"]:checked');
+            const q3 = document.querySelector('input[name="q3"]:checked');
+            const q4 = document.querySelector('input[name="q4"]:checked');
+            const q5 = document.querySelector('input[name="q5"]:checked');
+            const q6 = document.querySelector('input[name="q6"]:checked');
+
+            // 校验是否全部完成
+            if (!q1 || !q2 || !q3 || !q4 || !q5 || !q6) {
+                alert('请完成所有题目后再提交哦～');
+                return;
+            }
+
+            // 计算总分
+            score = parseInt(q1.value) + parseInt(q2.value) + parseInt(q3.value) + parseInt(q4.value) + parseInt(q5.value) + parseInt(q6.value);
+
+            // 生成结果
+            let resultHtml = '';
+            if (score >=6 && score <=8) {
+                // 睡眠王者
+                resultHtml = `
+                    <span class="result-tag">🏆 一觉到天亮 · 神仙睡眠体质</span>
+                    <h2 class="result-title">睡眠王者</h2>
+                    <p class="result-desc">恭喜你！你的睡眠质量直接拉满，堪称完美标杆！沾枕就睡、整夜安稳、醒后满血复活，身体能通过睡眠充分修复，白天精力爆棚、专注力在线，还能减少身体负担～ 继续保持当前作息，你就是朋友圈人人羡慕的好眠天花板！</p>
+                `;
+            } else if (score >=9 && score <=11) {
+                // 睡眠达人
+                resultHtml = `
+                    <span class="result-tag">🌟 睡眠优等生 · 微调即封神</span>
+                    <h2 class="result-title">睡眠达人</h2>
+                    <p class="result-desc">你的睡眠质量处于优秀水平，偶尔的小波动都是正常现象，完全不用焦虑！想升级成睡眠王者超简单：睡前1小时远离电子产品，固定23点前入睡，少喝浓茶咖啡，坚持3-5天就能感受到睡眠更安稳，白天状态也会更在线～</p>
+                `;
+            } else if (score >=12 && score <=14) {
+                // 睡眠预警
+                resultHtml = `
+                    <span class="result-tag">⚠️ 睡眠亮黄灯 · 急需调整作息</span>
+                    <h2 class="result-title">睡眠预警选手</h2>
+                    <p class="result-desc">注意啦！你的睡眠已经发出预警信号！入睡难、夜间易醒、白天犯困都是身体的提醒，长期下去会拖垮专注力和身体状态～ 先从2件小事改起：睡前泡10分钟脚、不熬夜刷手机，慢慢改善睡眠环境，1周就能明显缓解疲惫感！</p>
+                `;
+            } else {
+                // 睡眠特困户
+                resultHtml = `
+                    <span class="result-tag">🔴 睡眠严重透支 · 务必重视！</span>
+                    <h2 class="result-title">睡眠特困户</h2>
+                    <p class="result-desc">你的睡眠质量较差，已经影响到日常状态了！长期失眠、睡眠不足不仅会让你全天疲惫，还可能加重身体负担～ 先强制固定作息，杜绝熬夜，睡前可喝温牛奶助眠，若调整1个月仍无改善，一定要及时咨询专业人士，别让坏睡眠拖垮生活！</p>
+                `;
+            }
+
+            // 显示结果，隐藏答题区
+            resultContent.innerHTML = resultHtml;
+            testArea.style.display = 'none';
+            submitBtn.style.display = 'none';
+            resultArea.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
