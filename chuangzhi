@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>古代窗纸知识趣味问答</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background: linear-gradient(to bottom, #e8f4f8 0%, #ffffff 100%);
+            min-height: 100vh;
+            padding: 20px 10px;
+        }
+        /* 头部样式 */
+        .header {
+            text-align: center;
+            padding: 25px 0;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .header::after {
+            content: "";
+            display: block;
+            width: 80%;
+            height: 1px;
+            background: #b3d4e5;
+            margin: 20px auto 0;
+        }
+        .header h1 {
+            color: #2F5496;
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+        /* 答题卡片 */
+        .test-card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 25px 20px;
+            width: 92%;
+            margin: 0 auto 25px;
+            box-shadow: 0 4px 12px rgba(47, 84, 150, 0.08);
+        }
+        .tips {
+            color: #999;
+            font-size: 13px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #eee;
+        }
+        /* 题目样式 */
+        .question {
+            margin-bottom: 22px;
+        }
+        .question:last-child {
+            margin-bottom: 0;
+        }
+        .question-title {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            color: #555;
+        }
+        .option:hover {
+            border-color: #b3d4e5;
+            background: #f8fcfe;
+        }
+        .option input {
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
+            accent-color: #2F5496;
+        }
+        .option.selected {
+            background: #e8f4f8;
+            border-color: #2F5496;
+            color: #2F5496;
+            font-weight: 500;
+        }
+        /* 提交按钮 & 重新答题按钮 */
+        .submit-btn, .reset-btn {
+            display: block;
+            width: 92%;
+            height: 48px;
+            line-height: 48px;
+            border: none;
+            border-radius: 24px;
+            font-size: 17px;
+            font-weight: bold;
+            margin: 0 auto 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(47, 84, 150, 0.2);
+        }
+        .submit-btn {
+            background: #2F5496;
+            color: #fff;
+        }
+        .submit-btn:hover {
+            background: #234177;
+        }
+        .reset-btn {
+            background: #fff;
+            color: #2F5496;
+            border:1px solid #2F5496;
+            box-shadow: 0 4px 8px rgba(47,84,150,0.1);
+        }
+        .reset-btn:hover {
+            background: #e8f4f8;
+        }
+        .submit-btn:active, .reset-btn:active {
+            transform: scale(0.98);
+        }
+        /* 结果页样式 */
+        .result-page {
+            display: none;
+            width: 92%;
+            margin: 0 auto;
+        }
+        .result-card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 30px 25px;
+            box-shadow: 0 4px 12px rgba(47, 84, 150, 0.08);
+            margin-bottom: 20px;
+        }
+        .result-tag {
+            display: inline-block;
+            padding: 6px 15px;
+            background: #e8f4f8;
+            color: #2F5496;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 18px;
+            font-weight: 500;
+        }
+        .result-title {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .result-desc {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+        /* 答题结果样式 */
+        .answer-result {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px dashed #e8f4f8;
+        }
+        .answer-title {
+            font-size: 16px;
+            color: #2F5496;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        .answer-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 15px;
+        }
+        .answer-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        .correct {
+            color: #4CAF50;
+        }
+        .wrong {
+            color: #F44336;
+        }
+        /* 尾部互动 */
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 13px;
+            padding-top: 20px;
+        }
+        .footer-tip {
+            font-size: 12px;
+            margin-top: 8px;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部 -->
+    <div class="header">
+        <h1>📜 古代窗纸知识段位测试</h1>
+        <p>6道题解锁专属知识等级，选完提交立出结果～</p>
+    </div>
+
+    <!-- 答题区 -->
+    <div class="test-card" id="testArea">
+        <p class="tips">每题仅选1项，完成后点击下方提交按钮查看结果</p>
+        <!-- 题目1 -->
+        <div class="question">
+            <p class="question-title">1. 古代普通人家最常用的窗纸原料是？</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q1" value="1">A 竹子纤维纸
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="2">B 桑皮纸/麻纸
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="3">C 宣纸
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="4">D 藤纸
+                </label>
+            </div>
+        </div>
+        <!-- 题目2 -->
+        <div class="question">
+            <p class="question-title">2. 古代窗纸为啥能防水防潮？</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q2" value="1">A 天生防水，无需处理
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="2">B 刷桐油/猪油浸泡处理
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="3">C 用蜡反复涂抹
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="4">D 贴了防水布料
+                </label>
+            </div>
+        </div>
+        <!-- 题目3 -->
+        <div class="question">
+            <p class="question-title">3. 古代富贵人家会用哪种材料替代普通窗纸？</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q3" value="1">A 油纸
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="2">B 草纸
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="3">C 绢纱/糊纸绫罗
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="4">D 树皮纸
+                </label>
+            </div>
+        </div>
+        <!-- 题目4 -->
+        <div class="question">
+            <p class="question-title">4. 古代北方窗纸贴在窗棂内侧还是外侧？</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q4" value="1">A 内侧，防寒风刮坏+保暖
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="2">B 外侧，方便更换
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="3">C 内外都贴，双层防护
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="4">D 无固定位置，随意贴
+                </label>
+            </div>
+        </div>
+        <!-- 题目5 -->
+        <div class="question">
+            <p class="question-title">5. 古代窗纸除了挡风采光，还有啥作用？</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q5" value="1">A 装饰（染彩/贴窗花）
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="2">B 防盗，坚固不易破
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="3">C 隔音，隔绝外界声响
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="4">D 防虫，自带驱虫效果
+                </label>
+            </div>
+        </div>
+        <!-- 题目6 -->
+        <div class="question">
+            <p class="question-title">6. 宋代后哪种工艺让窗纸透光性更好？</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q6" value="1">A 加厚纸张
+                </label>
+                <label class="option">
+                    <input type="radio" name="q6" value="2">B 加矾处理，纸更透亮
+                </label>
+                <label class="option">
+                    <input type="radio" name="q6" value="3">C 减小纸张孔隙
+                </label>
+                <label class="option">
+                    <input type="radio" name="q6" value="4">D 染色提亮
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提交按钮 -->
+    <button class="submit-btn" id="submitBtn">点击提交，解锁我的知识段位</button>
+
+    <!-- 结果页 -->
+    <div class="result-page" id="resultArea">
+        <div class="result-card" id="resultContent">
+            <!-- 结果内容JS生成 -->
+        </div>
+        <!-- 重新答题按钮 -->
+        <button class="reset-btn" id="resetBtn">重新答题，挑战全对</button>
+        <div class="footer">
+            <p>测完别私藏～转发给朋友，看看谁是古代生活通！</p>
+            <p class="footer-tip">本次测试为趣味科普，仅供知识娱乐哦～</p>
+        </div>
+    </div>
+
+    <script>
+        // 选项选中高亮
+        const options = document.querySelectorAll('.option');
+        options.forEach(option => {
+            option.addEventListener('click', function() {
+                const sameQuestionOptions = this.parentElement.querySelectorAll('.option');
+                sameQuestionOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // 元素获取
+        const submitBtn = document.getElementById('submitBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const testArea = document.getElementById('testArea');
+        const resultArea = document.getElementById('resultArea');
+        const resultContent = document.getElementById('resultContent');
+        const allRadios = document.querySelectorAll('input[type="radio"]');
+        // 正确答案配置
+        const correctAnswers = {q1:"2", q2:"2", q3:"3", q4:"1", q5:"1", q6:"2"};
+
+        // 提交逻辑
+        submitBtn.addEventListener('click', function() {
+            let score = 0;
+            const q1 = document.querySelector('input[name="q1"]:checked');
+            const q2 = document.querySelector('input[name="q2"]:checked');
+            const q3 = document.querySelector('input[name="q3"]:checked');
+            const q4 = document.querySelector('input[name="q4"]:checked');
+            const q5 = document.querySelector('input[name="q5"]:checked');
+            const q6 = document.querySelector('input[name="q6"]:checked');
+            const answers = [q1,q2,q3,q4,q5,q6];
+
+            if (!q1 || !q2 || !q3 || !q4 || !q5 || !q6) {
+                alert('请完成所有题目后再提交哦～');
+                return;
+            }
+
+            // 计算总分+统计对错
+            let answerHtml = '';
+            answers.forEach((item,index) => {
+                const qKey = `q${index+1}`;
+                const isCorrect = item.value === correctAnswers[qKey];
+                if(isCorrect) score++;
+                answerHtml += `<div class="answer-item ${isCorrect?'correct':'wrong'}">
+                    第${index+1}题 ${isCorrect?'✅':'❌'}
+                </div>`;
+            });
+
+            // 生成段位结果
+            let resultHtml = '';
+            if (score >=6) {
+                resultHtml = `
+                    <span class="result-tag">🏆 古籍级通才 · 古代生活大师</span>
+                    <h2 class="result-title">窗纸知识天花板（全对！）</h2>
+                    <p class="result-desc">太厉害了！你对古代窗纸知识了如指掌，从原料、工艺到使用细节全都精准拿捏，堪比研究古代民俗的专家～ 不管是普通人家的麻纸，还是富贵人家的绢纱，你都能分清门道，这份知识储备真的太能打了！</p>
+                `;
+            } else if (score >=4) {
+                resultHtml = `
+                    <span class="result-tag">🌟 进阶达人 · 民俗知识能手</span>
+                    <h2 class="result-title">窗纸知识达人（对${score}题）</h2>
+                    <p class="result-desc">你的古代窗纸知识很扎实！核心知识点都能答对，只是少数细节稍有欠缺～ 再补补窗纸防水、透光的特殊工艺，就能升级成顶级通才啦，继续加油，你离民俗大神只差一步！</p>
+                `;
+            } else if (score >=2) {
+                resultHtml = `
+                    <span class="result-tag">⚠️ 入门选手 · 潜力满满待解锁</span>
+                    <h2 class="result-title">窗纸知识入门者（对${score}题）</h2>
+                    <p class="result-desc">你对古代窗纸有基础了解，但还有很多有趣细节没掌握～ 比如北方窗纸贴内侧是为了保暖抗风，桐油处理才是防水关键，多看看民俗科普，很快就能升级，解锁更多古代生活小知识！</p>
+                `;
+            } else {
+                resultHtml = `
+                    <span class="result-tag">🔴 萌新小白 · 快来解锁新知识</span>
+                    <h2 class="result-title">窗纸知识萌新（对${score}题）</h2>
+                    <p class="result-desc">你对古代窗纸知识了解较少，刚好趁这次测试补补课～ 古代窗纸不是普通纸张，刷油防水、贴内侧保暖、富贵人家用绢纱，这些知识点都超有趣，多积累民俗知识，下次就能轻松通关啦！</p>
+                `;
+            }
+
+            // 拼接对错结果展示
+            resultHtml += `
+                <div class="answer-result">
+                    <p class="answer-title">答题结果</p>
+                    <div class="answer-list">${answerHtml}</div>
+                </div>
+            `;
+
+            // 显示结果
+            resultContent.innerHTML = resultHtml;
+            testArea.style.display = 'none';
+            submitBtn.style.display = 'none';
+            resultArea.style.display = 'block';
+        });
+
+        // 重新答题逻辑
+        resetBtn.addEventListener('click',function(){
+            // 清空所有选中状态和高亮
+            allRadios.forEach(radio => {
+                radio.checked = false;
+                radio.parentElement.classList.remove('selected');
+            });
+            // 切换页面显示
+            resultArea.style.display = 'none';
+            testArea.style.display = 'block';
+            submitBtn.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
