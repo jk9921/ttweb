@@ -199,6 +199,44 @@
         .wrong {
             color: #F44336;
         }
+        /* 公众号宣传模块样式 */
+        .official-account {
+            background: #f8fcfe;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin: 0 auto 25px;
+            border: 1px dashed #b3d4e5;
+            width: 92%;
+        }
+        .official-title {
+            font-size: 16px;
+            color: #2F5496;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+        .qrcode-box {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 10px;
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .qrcode-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .official-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
         /* 尾部互动 */
         .footer {
             text-align: center;
@@ -340,6 +378,15 @@
     <div class="result-page" id="resultArea">
         <div class="result-card" id="resultContent">
             <!-- 结果内容JS生成 -->
+        </div>
+        <!-- 公众号宣传模块 -->
+        <div class="official-account" id="officialAccount">
+            <h3 class="official-title">关注公众号，解锁更多趣味古文化知识</h3>
+            <div class="qrcode-box">
+                <!-- 替换为你的公众号二维码图片链接 -->
+                <img src="your-qrcode-url.png" alt="公众号二维码">
+            </div>
+            <p class="official-desc">每日更新古代冷知识、民俗科普<br>扫码关注，带你读懂传统生活美学</p>
         </div>
         <!-- 重新答题按钮 -->
         <button class="reset-btn" id="resetBtn">重新答题，挑战全对</button>
