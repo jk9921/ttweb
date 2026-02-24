@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <!-- 移动端适配：视口设置，确保字体可缩放，触控友好 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>趣味测试 · 游乐场</title>
+    <style>
+        /* 轻量重置 + 柔光底色 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            background: #f0eef8;  /* 浅紫灰背景，区别科普蓝调 */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 16px 32px;
+            line-height: 1.5;
+            color: #2d2a3a;
+        }
+
+        /* 主容器 —— 卡片列宽类似手机app */
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* 趣味头部 */
+        .page-header {
+            margin-bottom: 24px;
+            padding: 0 6px;
+        }
+
+        .page-header h1 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4b3b6d, #8a6ca3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .page-header h1 span {
+            font-size: 2.6rem;
+            background: none;
+            -webkit-text-fill-color: initial;
+            color: #7a5fa3;
+        }
+
+        .page-header .subhead {
+            font-size: 1.1rem;
+            color: #5b4e72;
+            border-left: 5px solid #b297d3;
+            padding-left: 16px;
+            margin-top: 4px;
+            font-weight: 350;
+            background: rgba(220, 210, 240, 0.3);
+            border-radius: 0 20px 20px 0;
+            padding: 8px 0 8px 16px;
+        }
+
+        /* 卡片网格 —— 垂直流式 */
+        .card-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        /* 卡片：整块可点击，圆润 + 微光 */
+        .card {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 18px 20px;
+            text-decoration: none;
+            color: #2d2a3a;
+            box-shadow: 0 10px 22px rgba(90, 60, 120, 0.1), 0 2px 6px rgba(0,0,0,0.02);
+            border: 1px solid rgba(180, 150, 210, 0.25);
+            transition: all 0.18s ease;
+            -webkit-tap-highlight-color: rgba(125, 85, 180, 0.2);
+            cursor: pointer;
+            backdrop-filter: blur(1px);
+        }
+
+        /* 手指按下效果 */
+        .card:active {
+            transform: scale(0.985);
+            background-color: #f9f3ff;
+            border-color: #b89fd9;
+            box-shadow: 0 6px 14px rgba(110, 70, 160, 0.15);
+        }
+
+        /* 左侧趣味 emoji 大图标 */
+        .card-emoji {
+            font-size: 2.9rem;
+            min-width: 70px;
+            text-align: center;
+            line-height: 1;
+            filter: drop-shadow(2px 4px 8px rgba(110, 70, 150, 0.2));
+            margin-right: 6px;
+        }
+
+        /* 中间文字区域 */
+        .card-content {
+            flex: 1;
+            margin: 0 8px;
+        }
+
+        .card-content h2 {
+            font-size: 1.45rem;
+            font-weight: 660;
+            margin-bottom: 5px;
+            color: #2f2642;
+            line-height: 1.25;
+        }
+
+        .card-content p {
+            font-size: 1rem;
+            color: #5f5180;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-word;
+            line-height: 1.4;
+        }
+
+        /* 右侧小箭头 (活泼版) */
+        .card-arrow {
+            font-size: 2.2rem;
+            color: #ac98cf;
+            min-width: 38px;
+            text-align: right;
+            opacity: 0.75;
+            transition: all 0.2s;
+            transform: translateX(0);
+            font-weight: 250;
+        }
+
+        .card:hover .card-arrow,
+        .card:active .card-arrow {
+            opacity: 1;
+            color: #7759b2;
+            transform: translateX(6px);
+        }
+
+        /* 底部小贴士 */
+        .footer-note {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.95rem;
+            color: #6a5e83;
+            border-top: 2px dotted #cebfe5;
+            padding-top: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-note .tip-badge {
+            background: #e3d9f2;
+            padding: 8px 22px;
+            border-radius: 40px;
+            color: #3a2e52;
+            font-weight: 500;
+            box-shadow: inset 0 1px 4px rgba(255,255,255,0.8), 0 2px 6px rgba(0,0,0,0.05);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.95rem;
+        }
+
+        .footer-note a {
+            color: #624c9c;
+            text-decoration: none;
+            border-bottom: 2px dotted #b39fd9;
+            font-weight: 500;
+        }
+
+        .footer-note a:hover {
+            border-bottom: 2px solid #7f64b5;
+        }
+
+        /* 超小屏幕优化 */
+        @media (max-width: 380px) {
+            .card-emoji {
+                font-size: 2.5rem;
+                min-width: 58px;
+            }
+            .card-content h2 {
+                font-size: 1.3rem;
+            }
+            .card {
+                padding: 15px 16px;
+            }
+            .card-arrow {
+                font-size: 2rem;
+                min-width: 32px;
+            }
+        }
+
+        /* 保持访问链接颜色统一（不刺眼） */
+        .card:visited,
+        .card:link {
+            color: #2d2a3a;
+        }
+        .card:visited .card-content p {
+            color: #5f5180;
+        }
+
+        /* 焦点样式 */
+        .card:focus-visible {
+            outline: 4px solid #b89fd9;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="page-header">
+            <h1>
+                <span>🧪</span> 测试·游乐场
+            </h1>
+            <div class="subhead">
+                探索未知的自己 &nbsp; 手指一点，即刻开玩
+            </div>
+        </div>
+
+        <div class="card-grid" id="testGrid">
+
+            <a href="https://web.dorr.top/shuijiao.html" class="card test-link">
+                <div class="card-emoji">🎨</div>
+                <div class="card-content">
+                    <h2>睡眠质量</h2>
+                    <p>数羊数到天亮？测测你的睡眠健康分。</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            
+            <a href="#" class="card test-link">
+                <div class="card-emoji">🧠</div>
+                <div class="card-content">
+                    <h2>智商大挑战</h2>
+                    <p>20道趣味谜题，测测你的逻辑与洞察力。</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            <!-- 
+            <a href="#" class="card test-link">
+                <div class="card-emoji">🌪️</div>
+                <div class="card-content">
+                    <h2>压力指数</h2>
+                    <p>最近心里有点累？快速评估你的抗压状态。</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            <a href="#" class="card test-link">
+                <div class="card-emoji">💞</div>
+                <div class="card-content">
+                    <h2>爱情匹配</h2>
+                    <p>你们是天作之合还是欢喜冤家？双人默契测试。</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            <a href="#" class="card test-link">
+                <div class="card-emoji">😴</div>
+                <div class="card-content">
+                    <h2>睡眠质量</h2>
+                    <p>数羊数到天亮？测测你的睡眠健康分。</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            <a href="#" class="card test-link">
+                <div class="card-emoji">💼</div>
+                <div class="card-content">
+                    <h2>职场性格</h2>
+                    <p>你是策划者、执行者还是社交达人？找到你的职场定位。</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            <a href="#" class="card test-link">
+                <div class="card-emoji">🧘</div>
+                <div class="card-content">
+                    <h2>焦虑自评</h2>
+                    <p>内心平静还是暗流涌动？专业级焦虑水平快速筛查。</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            <a href="#" class="card test-link">
+                <div class="card-emoji">🍜</div>
+                <div class="card-content">
+                    <h2>吃货人格</h2>
+                    <p>火锅控、甜品党……从口味看出你的隐藏性格！</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            <a href="#" class="card test-link">
+                <div class="card-emoji">🎯</div>
+                <div class="card-content">
+                    <h2>左右脑</h2>
+                    <p>你是逻辑左脑还是艺术右脑？5张图揭晓倾向。</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            <a href="#" class="card test-link">
+                <div class="card-emoji">💡</div>
+                <div class="card-content">
+                    <h2>创造力</h2>
+                    <p>打破常规，你的脑袋里藏着多少奇思妙想？</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+			-->
+        </div>
+
+    </div>
+
+</body>
+</html>
