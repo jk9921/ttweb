@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <!-- 移动端优化视图 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>趣味科普 · 导航舱</title>
+    <style>
+        /* 简单重置 + 沉浸式手机阅读 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f4f6fa;  /* 柔和底色调 */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 16px 32px;  /* 上下留气口 */
+            line-height: 1.5;
+            color: #1e2b3c;
+        }
+
+        /* 主容器 —— 卡片列舒适居中 */
+        .nav-container {
+            max-width: 600px;          /* 大屏也不变宽，保持手机握感 */
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* 页头区域：趣味点睛 */
+        .page-header {
+            margin-bottom: 24px;
+            padding: 0 4px;
+        }
+
+        .page-header h1 {
+            font-size: 2.1rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(145deg, #1e3c5c, #2b5b8b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .page-header h1 span {
+            font-size: 2.4rem;
+            background: none;
+            -webkit-text-fill-color: initial;
+            color: #2e5a88; 
+        }
+
+        .page-header .subhead {
+            font-size: 1.05rem;
+            color: #4e6279;
+            border-left: 4px solid #7aa5c2;
+            padding-left: 14px;
+            margin-top: 4px;
+        }
+
+        /* 科普卡片网格 (实际就是优雅的一列) */
+        .card-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        /* 卡片 —— 本身就是可点击链接，无下划线，整块点击 */
+        .card {
+            display: flex;
+            align-items: center;
+            background: #ffffffdd;
+            backdrop-filter: blur(2px);
+            background: white;
+            border-radius: 26px;          /* 圆润卡片，更适手指 */
+            padding: 16px 18px;
+            box-shadow: 0 8px 20px rgba(0, 20, 30, 0.08), 0 2px 6px rgba(0,0,0,0.02);
+            text-decoration: none;
+            color: #1e2b3c;
+            border: 1px solid rgba(150, 180, 210, 0.2);
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: rgba(43, 91, 139, 0.15); /* 触控反馈 */
+            cursor: pointer;
+        }
+
+        /* 按下状态 (手机手指按住时的微缩反馈) */
+        .card:active {
+            transform: scale(0.985);
+            background-color: #f5faff;
+            box-shadow: 0 4px 12px rgba(0, 40, 70, 0.1);
+            border-color: rgba(80, 140, 200, 0.3);
+        }
+
+        /* 左侧趣味 emoji 专区 */
+        .card-emoji {
+            font-size: 2.8rem;
+            min-width: 64px;              /* 保证对齐 */
+            text-align: center;
+            line-height: 1;
+            filter: drop-shadow(2px 2px 6px rgba(0,60,100,0.15));
+            margin-right: 6px;
+        }
+
+        /* 中间内容区域：自动撑开 */
+        .card-content {
+            flex: 1;
+            margin: 0 8px;
+        }
+
+        .card-content h2 {
+            font-size: 1.35rem;
+            font-weight: 660;
+            margin-bottom: 4px;
+            color: #0f293f;
+            line-height: 1.3;
+        }
+
+        .card-content p {
+            font-size: 0.95rem;
+            color: #446688;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;          /* 最多两行，保持卡片紧凑 */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-word;
+            line-height: 1.4;
+        }
+
+        /* 右侧小箭头 · 轻量化引导 */
+        .card-arrow {
+            font-size: 2rem;
+            color: #8ba9cc;
+            min-width: 36px;
+            text-align: right;
+            opacity: 0.7;
+            transition: opacity 0.2s, transform 0.2s;
+            font-weight: 200;
+            transform: translateX(0);
+        }
+
+        /* 卡片整体悬浮或点击时箭头更明显 (桌面悬停，手机也是轻触反应) */
+        .card:hover .card-arrow,
+        .card:active .card-arrow {
+            opacity: 1;
+            color: #2e5a88;
+            transform: translateX(4px);
+        }
+
+        /* 尾部小彩蛋：计数 + 轻松语气 */
+        .footer-note {
+            margin-top: 36px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #778fa5;
+            border-top: 1px dashed #b6cbd9;
+            padding-top: 22px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .footer-note a {
+            color: #2b5b8b;
+            text-decoration: none;
+            border-bottom: 1px dotted #8bb3d1;
+        }
+
+        .footer-note a:hover {
+            border-bottom: 2px solid;
+        }
+
+        /* 极简辅助：区分已访问链接（依然保持辨识度，但不变色） */
+        .card:visited,
+        .card:link {
+            color: #1e2b3c;   /* 保证视觉统一，不出现刺眼的紫色 */
+        }
+
+        /* 保证卡片内的描述不受访问状态影响 */
+        .card:visited .card-content p {
+            color: #446688;
+        }
+
+        /* 对于focus状态（键盘用户）保留轮廓，但手机基本用不到，优雅处理 */
+        .card:focus-visible {
+            outline: 3px solid #7aa5c2;
+            outline-offset: 2px;
+        }
+
+        /* 微调小屏幕 (小于380px 让emoji稍微缩小，避免拥挤) */
+        @media (max-width: 380px) {
+            .card-emoji {
+                font-size: 2.4rem;
+                min-width: 52px;
+            }
+            .card-content h2 {
+                font-size: 1.2rem;
+            }
+            .card-arrow {
+                font-size: 1.7rem;
+                min-width: 28px;
+            }
+            .card {
+                padding: 14px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <!-- 头部清爽引导 -->
+        <div class="page-header">
+            <h1>
+                <span>🔬</span> 趣味科普·任意门
+            </h1>
+            <div class="subhead">
+                好奇心词典 · 点开即读 &nbsp; 适合手机探险
+            </div>
+        </div>
+
+        <!-- 卡片列表 —— 每一张都是通往趣味知识的链接 -->
+        <div class="card-grid">
+            
+            <a href="https://web.dorr.top/live.html" class="card">
+                <div class="card-emoji">⚛️</div>
+                <div class="card-content">
+                    <h2>生活避坑指南</h2>
+                    <p>生活科普避坑指南（99%的人都中招）</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            <a href="https://web.dorr.top/shengwu.html" class="card">
+                <div class="card-emoji">🌿</div>
+                <div class="card-content">
+                    <h2>生物避坑指南</h2>
+                    <p>生物科普避坑指南（亲子/学生必看）</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+
+            <a href="https://web.dorr.top/tianwen.html" class="card">
+                <div class="card-emoji">🌈</div>
+                <div class="card-content">
+                    <h2>天文避坑指南</h2>
+                    <p>天文科普避坑指南（天文爱好者必看）</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            <!-- 
+			
+            <a href="https://zh.wikipedia.org/wiki/进化论" class="card">
+                <div class="card-emoji">🧬</div>
+                <div class="card-content">
+                    <h2>进化论</h2>
+                    <p>达尔文带你了解自然选择，物种如何随时间演变。</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+
+            <a href="https://zh.wikipedia.org/wiki/量子纠缠" class="card">
+                <div class="card-emoji">⚛️</div>
+                <div class="card-content">
+                    <h2>量子纠缠</h2>
+                    <p>“鬼魅般的超距作用”——两个粒子之间的神秘感应。</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+
+            <a href="https://zh.wikipedia.org/wiki/白垩纪-古近纪灭绝事件" class="card">
+                <div class="card-emoji">🦖</div>
+                <div class="card-content">
+                    <h2>恐龙灭绝</h2>
+                    <p>小行星撞击地球，如何终结了恐龙时代？</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+
+            <a href="https://zh.wikipedia.org/wiki/CRISPR基因编辑" class="card">
+                <div class="card-emoji">🧪</div>
+                <div class="card-content">
+                    <h2>基因编辑</h2>
+                    <p>CRISPR技术：像修改文本一样改写生命密码。</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            
+            <a href="https://zh.wikipedia.org/wiki/暗物质" class="card">
+                <div class="card-emoji">🌌</div>
+                <div class="card-content">
+                    <h2>暗物质</h2>
+                    <p>宇宙质量的主角，看不见却塑造了星系结构。</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            
+            <a href="https://zh.wikipedia.org/wiki/费曼物理学讲义" class="card">
+                <div class="card-emoji">📘</div>
+                <div class="card-content">
+                    <h2>费曼物理</h2>
+                    <p>有趣的物理讲义，像听故事一样学物理。</p>
+                </div>
+                <div class="card-arrow">→</div>
+            </a>
+			
+			-->
+			
+        </div>
+    </div>
+</body>
+</html>
